@@ -1,6 +1,3 @@
-const events = require('events');
-
-const PermissionEvents = new events.EventEmitter();
 
 const UserGroups = [{
   name: 'authors',
@@ -35,15 +32,10 @@ class Permission {
     const intersection = new Set(
       [...pgWithPermission].filter(x => ugWithPermission.has(x)));
 
-    const allowed = (intersection.size);
-    PermissionEvents.emit(
-      allowed ? 'Permission_Allowed' : 'Permission_Denied', 
-      { user, permission });
-    return allowed
+    return (intersection.size);
   }
 }
 
 module.exports = {
   Permission,
-  PermissionEvents
 }

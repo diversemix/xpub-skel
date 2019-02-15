@@ -1,4 +1,3 @@
-const ModelEvents = require('./model-events');
 const BaseModel = require('./base-model');
 
 class Manuscript extends BaseModel {
@@ -11,12 +10,10 @@ class Manuscript extends BaseModel {
 
   setState(newState) {
     this.state = newState;
-    ModelEvents.emit('Manuscript_StateChange', this);
   }
 
   save() {
     super.save();
-    ModelEvents.emit('Manuscript_Save', this)
   }
 }
 
