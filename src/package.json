@@ -1,5 +1,5 @@
 {
-  "name": "xpub-poc",
+  "name": "xpub-skel",
   "version": "1.0.0",
   "description": "",
   "main": "demo.js",
@@ -7,8 +7,9 @@
     "test": "jest"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "javascript-state-machine": "^3.1.0",
     "jest": "^24.1.0"
   }
 }
