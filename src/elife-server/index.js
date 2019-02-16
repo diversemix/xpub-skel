@@ -1,4 +1,4 @@
-const ManuscriptControl = require('./manuscript');
+const ManuscriptControl = require('./manuscript-control');
 
 /* 
  * Server is representitve of a web-servers routed request handlers.

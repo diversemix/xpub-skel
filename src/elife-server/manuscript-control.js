@@ -1,7 +1,7 @@
 const { 
   AuditLog,
   Manuscript,
-} = require('./xpub-model');
+} = require('./xpub-datamodel');
 
 const { 
   Permission,
