@@ -15,7 +15,7 @@ const PermissionGroups = [{
 }];
 
 class Permission {
-  static isAllowed(user, permission) {
+  static isAllowed(userId, permission) {
     // find all PermisionGroups which have this permission
     const foundPG = PermissionGroups.filter( group => 
       group.permissions.indexOf(permission) >= 0
@@ -23,7 +23,7 @@ class Permission {
 
     // find all the UserGroups the user is a member of
     const foundUG = UserGroups.filter(
-      group => group.members.indexOf(user.name) >= 0 
+      group => group.members.indexOf(userId) >= 0 
     ).reduce( (acc, group) => acc.concat(group.permissionGroups), []);
 
     // find the intersection of the two arrays
@@ -32,7 +32,11 @@ class Permission {
     const intersection = new Set(
       [...pgWithPermission].filter(x => ugWithPermission.has(x)));
 
-    return (intersection.size);
+    const allowed = (intersection.size);
+    if (!allowed) {
+      console.log(`Not allowed: ${userId} => ${permission}`);
+    }
+    return allowed;
   }
 }
 

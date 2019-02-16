@@ -1,42 +1,65 @@
 const { 
   AuditLog,
   Manuscript,
-} = require('../xpub-model');
+} = require('./xpub-model');
 
 const { 
   Permission,
-} = require('../xpub-accesscontrol');
+} = require('./xpub-accesscontrol');
+
+const {
+  ManuscriptStateMachine,
+} = require('./xpub-workflow');
+
 
 class ManuscriptControl {
-  constructor(user) {
-    this.user = user;
+  constructor(manId, userId) {
+    this.userId = userId;
+    this._fsm();
+
+    this.manuscript = null
+    if (manId) {
+      // this should go and find the manuscript - creating one here is just a cludge
+      this.manuscript = new Manuscript(userId, null);
+    }
+
+    this.onAfterDoUpload = () => {
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    }
   }
+  
 
   create(data) {
     const permission = 'Manuscript_CREATE';
-    const allowed = Permission.isAllowed(this.user, permission);
-    let ms = null;
+    const allowed = Permission.isAllowed(this.userId, permission);
+    this.manuscript = null
     if (allowed) {
-      ms = new Manuscript(this.user, data);
-      this.save(ms);
+      this.manuscript = new Manuscript(this.userId, data);
+      this.save();
+    } else {
+      throw new Error("Permission Denied")
     }
-    return ms;
   }
 
-  save(ms) {
-    ms.save() 
-    AuditLog.audit(this.user, "save", "Mauscript", ms);
+  save() {
+    // update the manuscript state with the FSM state
+    this.manuscript.state = this.state;
+    this.manuscript.save() 
+    AuditLog.audit(this.userId, "save", "Mauscript", this.manuscript);
   }
 
-  setState(ms, data) {
+  upload(data) {
     const permission = 'Manuscript_UPDATE';
-    const allowed = Permission.isAllowed(this.user, permission);
+    const allowed = Permission.isAllowed(this.userId, permission);
     if (allowed) {
-      ms.setState(data);
-      AuditLog.audit(this.user, "setState", "Mauscript", ms.state);
-      this.save(ms);
+      console.log("... now uploading....");
+      this.doUpload()
+      AuditLog.audit(this.userId, "upload", "Mauscript", data);
+      this.save();
     }
   }
 }
+
+ManuscriptStateMachine(ManuscriptControl);
 
 module.exports = ManuscriptControl

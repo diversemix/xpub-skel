@@ -1,6 +1,5 @@
 const ManuscriptControl = require('./manuscript');
 
-
 /* 
  * Server is representitve of a web-servers routed request handlers.
  * As such the server delgates to the controllers.
@@ -12,13 +11,15 @@ class Server {
   }
 
   static createManuscript(req) {
-    const msControl = new ManuscriptControl(req.user);
-    return msControl.create(req.data);
+    const msControl = new ManuscriptControl(null, req.userId);
+    msControl.create(req.data);
+    return msControl.manuscript;
   }
 
-  static setManuscriptState(req, ms) {
-    const msControl = new ManuscriptControl(req.user);
-    msControl.setState(ms, req.data);
+  static uploadManuscript(req) {
+    const msControl = new ManuscriptControl(req.manId, req.userId);
+    msControl.upload(req.data);
+    return msControl.manuscript;
   }
 }
 
