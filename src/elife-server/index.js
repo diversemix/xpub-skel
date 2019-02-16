@@ -1,8 +1,7 @@
 const ManuscriptControl = require('./manuscript-control');
 
 /* 
- * Server is representitve of a web-servers routed request handlers.
- * As such the server delgates to the controllers.
+ * Server is representitve of a web-server routing requests to the controllers.
  */
 
 class Server {

@@ -1,16 +1,14 @@
-const { 
-  AuditLog,
-  Manuscript,
-} = require('./xpub-datamodel');
+const { AuditLog, Manuscript } = require('./xpub-datamodel');
+const { Permission } = require('./xpub-accesscontrol');
+const { ManuscriptStateMachine } = require('./xpub-workflow');
 
-const { 
-  Permission,
-} = require('./xpub-accesscontrol');
+// this is effectively a partial class, made to break things down
+const transitions = require('./manuscript-transitions');
 
-const {
-  ManuscriptStateMachine,
-} = require('./xpub-workflow');
-
+/* 
+ * This class wraps the underlying database object and orchestrates the other
+ * xpub-xxx libraries to fulfil all the needs for a Manuscript (Submission).
+ */
 
 class ManuscriptControl {
   constructor(manId, userId) {
@@ -23,12 +21,10 @@ class ManuscriptControl {
       this.manuscript = new Manuscript(userId, null);
     }
 
-    this.onAfterDoUpload = () => {
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    }
+    this.onAfterDoUpload = transitions.onAfterDoUpload;
+    this.onBeforeDoUpload = transitions.onBeforeDoUpload;
   }
   
-
   create(data) {
     const permission = 'Manuscript_CREATE';
     const allowed = Permission.isAllowed(this.userId, permission);
@@ -52,7 +48,7 @@ class ManuscriptControl {
     const permission = 'Manuscript_UPDATE';
     const allowed = Permission.isAllowed(this.userId, permission);
     if (allowed) {
-      console.log("... now uploading....");
+      console.log("upload()");
       this.doUpload()
       AuditLog.audit(this.userId, "upload", "Mauscript", data);
       this.save();

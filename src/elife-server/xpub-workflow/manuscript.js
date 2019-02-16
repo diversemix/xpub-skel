@@ -1,5 +1,8 @@
 const StateMachine = require('javascript-state-machine');
 
+/* 
+ * The FSM for a Manuscript all the events are implemented just for example.
+ */
 const ManuscriptStateMachine = (classObject) => StateMachine.factory( classObject, {
   init: 'A',
   transitions: [

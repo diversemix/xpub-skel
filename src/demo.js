@@ -1,5 +1,10 @@
 const { Server } = require('./elife-server');
 
+/*
+ * This is meant to simulate a number of requests to the 'Server'
+ */
+
+
 Server.start()
 
 
@@ -16,8 +21,6 @@ const testUpload = () =>
     manId: 1,
     data: 'test-file'
   });
-
-
 
 testCreate();
 testUpload();

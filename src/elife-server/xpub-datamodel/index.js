@@ -1,4 +1,4 @@
-const AuditLog = require('./audit-log');
+const AuditLog = require('./auditlog');
 const User = require('./user');
 const Manuscript = require('./manuscript');
 
